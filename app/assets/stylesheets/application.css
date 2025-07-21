@@ -8,3 +8,296 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Basic styling for Git-docser */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  line-height: 1.6;
+  background-color: #f8f9fa;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  color: white;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #28a745;
+}
+
+.btn-primary:hover {
+  background-color: #218838;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 0.875rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: white;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  margin: 20px 0;
+  border: 1px solid #e9ecef;
+  white-space: pre-wrap;
+}
+
+#error_explanation {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.info {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+}
+
+.document-info, .repository-info, .user-info {
+  background-color: white;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+  border: 1px solid #e9ecef;
+}
+
+h1, h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+a {
+  color: #007bff;
+}
+
+a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* GitHub-like diff styling */
+.diff-container {
+  background-color: white;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  margin: 20px 0;
+}
+
+.diff-file {
+  border-bottom: 1px solid #d0d7de;
+}
+
+.diff-file:last-child {
+  border-bottom: none;
+}
+
+.diff-file-header {
+  background-color: #f6f8fa;
+  padding: 8px 16px;
+  border-bottom: 1px solid #d0d7de;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.file-path {
+  color: #24292f;
+}
+
+.diff-hunk {
+  border-bottom: 1px solid #d0d7de;
+}
+
+.diff-hunk:last-child {
+  border-bottom: none;
+}
+
+.hunk-header {
+  background-color: #f6f8fa;
+  color: #656d76;
+  padding: 4px 16px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  border: none;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+}
+
+.diff-line {
+  border: none;
+}
+
+.diff-line td {
+  border: none;
+  padding: 0;
+  vertical-align: top;
+}
+
+.line-number {
+  width: 50px;
+  padding: 0 10px;
+  color: #656d76;
+  text-align: right;
+  user-select: none;
+  background-color: #f6f8fa;
+  border-right: 1px solid #d0d7de;
+}
+
+.old-line-number {
+  border-right: 1px solid #d0d7de;
+}
+
+.new-line-number {
+  border-right: 1px solid #d0d7de;
+}
+
+.line-content {
+  padding: 0;
+  white-space: pre;
+  width: 100%;
+}
+
+.line-prefix {
+  padding: 0 8px;
+  color: #656d76;
+  user-select: none;
+  display: inline-block;
+  width: 20px;
+}
+
+.line-text {
+  padding-right: 16px;
+  color: #24292f;
+}
+
+/* Diff line colors */
+.diff-line-addition {
+  background-color: #d1f4d0;
+}
+
+.diff-line-addition .line-number {
+  background-color: #cceccc;
+}
+
+.diff-line-addition .line-prefix {
+  color: #1a7f37;
+}
+
+.diff-line-addition .line-text {
+  background-color: #d1f4d0;
+}
+
+.diff-line-deletion {
+  background-color: #ffd7d5;
+}
+
+.diff-line-deletion .line-number {
+  background-color: #ffd7d5;
+}
+
+.diff-line-deletion .line-prefix {
+  color: #d1242f;
+}
+
+.diff-line-deletion .line-text {
+  background-color: #ffd7d5;
+}
+
+.diff-line-context {
+  background-color: white;
+}
+
+.diff-line-context .line-prefix {
+  color: #656d76;
+}
+
+/* File stats */
+.diff-stats {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+}
+
+.diff-stats-item {
+  display: inline-block;
+  margin-right: 20px;
+  color: #24292f;
+  font-size: 14px;
+}
+
+.diff-stats-additions {
+  color: #1a7f37;
+  font-weight: 600;
+}
+
+.diff-stats-deletions {
+  color: #d1242f;
+  font-weight: 600;
+}

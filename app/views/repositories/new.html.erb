@@ -1,0 +1,30 @@
+<h1>リポジトリ登録</h1>
+
+<%= form_with(model: @repository, local: true) do |form| %>
+  <% if @repository.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@repository.errors.count, "error") %>が発生しました:</h2>
+      <ul>
+      <% @repository.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name, "リポジトリ名" %>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :url, "リポジトリURL" %>
+    <%= form.url_field :url, required: true, placeholder: "https://github.com/user/repo" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "登録" %>
+  </div>
+<% end %>
+
+<%= link_to "戻る", repositories_path %>

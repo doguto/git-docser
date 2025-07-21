@@ -1,0 +1,34 @@
+<h1>ドキュメント一覧</h1>
+
+<%= link_to "新しいドキュメントを作成", new_document_path, class: "btn btn-primary" %>
+
+<% if @documents.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>タイトル</th>
+        <th>リポジトリ</th>
+        <th>PR番号</th>
+        <th>作成日</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @documents.each do |document| %>
+        <tr>
+          <td><%= link_to document.title, document_path(document) %></td>
+          <td><%= link_to document.repository.name, repository_path(document.repository) %></td>
+          <td>#<%= document.pull_request_number %></td>
+          <td><%= document.created_at.strftime("%Y-%m-%d") %></td>
+          <td>
+            <%= link_to "詳細", document_path(document), class: "btn btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>ドキュメントが作成されていません。</p>
+<% end %>
+
+<%= link_to "ダッシュボード", user_path(current_user) %>
