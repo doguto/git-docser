@@ -56,27 +56,83 @@ class GitService
         response_body = response.body.force_encoding('UTF-8')
         pr_data = JSON.parse(response_body)
         
-        # 差分を取得
-        diff_uri = URI("https://api.github.com/repos/#{owner}/#{repo}/pulls/#{pr_number}.diff")
-        diff_http = Net::HTTP.new(diff_uri.host, diff_uri.port)
-        diff_http.use_ssl = true
-        diff_request = Net::HTTP::Get.new(diff_uri)
-        diff_request['Accept'] = 'application/vnd.github.v3.diff'
-        diff_request['User-Agent'] = 'Git-Docser/1.0'
+        Rails.logger.info "PRデータ取得成功: #{pr_data['title']}"
+        Rails.logger.info "Commits: #{pr_data['commits']}, Additions: #{pr_data['additions']}, Deletions: #{pr_data['deletions']}, Changed files: #{pr_data['changed_files']}"
         
-        diff_response = diff_http.request(diff_request)
-        Rails.logger.info "差分APIレスポンスコード: #{diff_response.code}"
+        # 差分を取得 - GitHub APIの.diffエンドポイントを直接使用
+        diff_api_url = "https://api.github.com/repos/#{owner}/#{repo}/pulls/#{pr_number}.diff"
+        Rails.logger.info "差分API URL: #{diff_api_url}"
         
-        if diff_response.code == '200'
-          # 差分データも適切にエンコーディング
-          diff_body = diff_response.body.force_encoding('UTF-8')
+        begin
+          diff_uri = URI(diff_api_url)
+          diff_http = Net::HTTP.new(diff_uri.host, diff_uri.port)
+          diff_http.use_ssl = true
+          diff_request = Net::HTTP::Get.new(diff_uri.path)
+          diff_request['Accept'] = 'application/vnd.github.v3.diff'
+          diff_request['User-Agent'] = 'Git-Docser/1.0'
+          
+          diff_response = diff_http.request(diff_request)
+          Rails.logger.info "差分APIレスポンスコード: #{diff_response.code}"
+          
+          if diff_response.code == '200'
+            # 差分データを適切にエンコーディング
+            diff_body = diff_response.body.force_encoding('UTF-8')
+            Rails.logger.info "差分データ取得成功: #{diff_body.length}文字"
+            
+            return {
+              title: pr_data['title'] || 'タイトルなし',
+              body: pr_data['body'] || '説明なし',
+              diff: diff_body,
+              stats: {
+                commits: pr_data['commits'],
+                additions: pr_data['additions'],
+                deletions: pr_data['deletions'],
+                changed_files: pr_data['changed_files']
+              },
+              urls: {
+                html_url: pr_data['html_url'],
+                diff_url: pr_data['diff_url']
+              }
+            }
+          else
+            Rails.logger.warn "差分の取得に失敗: #{diff_response.code}"
+            Rails.logger.warn "エラー詳細: #{diff_response.body[0..200]}" if diff_response.body
+            
+            # 差分が取得できなくてもPR情報は返す
+            return {
+              title: pr_data['title'] || 'タイトルなし',
+              body: pr_data['body'] || '説明なし',
+              diff: "差分を取得できませんでした (エラーコード: #{diff_response.code})",
+              stats: {
+                commits: pr_data['commits'],
+                additions: pr_data['additions'],
+                deletions: pr_data['deletions'],
+                changed_files: pr_data['changed_files']
+              },
+              urls: {
+                html_url: pr_data['html_url'],
+                diff_url: pr_data['diff_url']
+              }
+            }
+          end
+        rescue => diff_error
+          Rails.logger.error "差分取得中にエラー: #{diff_error.message}"
+          # エラーが発生してもPR情報は返す
           return {
             title: pr_data['title'] || 'タイトルなし',
-            body: pr_data['body'] || '説明なし', 
-            diff: diff_body
+            body: pr_data['body'] || '説明なし',
+            diff: "差分取得中にエラーが発生しました: #{diff_error.message}",
+            stats: {
+              commits: pr_data['commits'],
+              additions: pr_data['additions'],
+              deletions: pr_data['deletions'],
+              changed_files: pr_data['changed_files']
+            },
+            urls: {
+              html_url: pr_data['html_url'],
+              diff_url: pr_data['diff_url']
+            }
           }
-        else
-          raise "差分の取得に失敗しました (コード: #{diff_response.code})"
         end
       else
         error_msg = "Pull Request情報の取得に失敗しました (コード: #{response.code})"

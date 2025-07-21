@@ -7,6 +7,58 @@
   <p><strong>作成日:</strong> <%= @document.created_at.strftime("%Y-%m-%d %H:%M") %></p>
 </div>
 
+<% if @document.diff_data.present? %>
+  <div class="diff-section">
+    <h2>差分表示</h2>
+    
+    <% diff_data = parse_diff_data(@document.diff_data) %>
+    <% if diff_data.is_a?(Hash) && diff_data[:stats] %>
+      <div class="diff-stats">
+        <span class="diff-stats-item">
+          <strong>変更ファイル数:</strong> <%= diff_data[:stats][:changed_files] || 'N/A' %>
+        </span>
+        <span class="diff-stats-item diff-stats-additions">
+          <strong>+<%= diff_data[:stats][:additions] || 0 %></strong> 追加
+        </span>
+        <span class="diff-stats-item diff-stats-deletions">
+          <strong>-<%= diff_data[:stats][:deletions] || 0 %></strong> 削除
+        </span>
+        <% if diff_data[:urls] && diff_data[:urls][:html_url] %>
+          <span class="diff-stats-item">
+            <%= link_to "GitHubで表示", diff_data[:urls][:html_url], target: "_blank", class: "btn btn-sm" %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <div class="diff-container">
+      <% if diff_data.is_a?(Hash) && diff_data[:diff] %>
+        <% files = parse_git_diff(diff_data[:diff]) %>
+        <% if files.any? %>
+          <% files.each do |file| %>
+            <%= render_diff_file(file).html_safe %>
+          <% end %>
+        <% else %>
+          <div class="diff-file">
+            <div class="diff-file-header">差分データをパースできませんでした</div>
+            <div style="padding: 16px; font-family: monospace; white-space: pre-wrap; background-color: #f6f8fa;">
+              <%= diff_data[:diff] %>
+            </div>
+          </div>
+        <% end %>
+      <% elsif diff_data.is_a?(Array) %>
+        <% diff_data.each do |file| %>
+          <%= render_diff_file(file).html_safe %>
+        <% end %>
+      <% else %>
+        <div class="diff-file">
+          <div class="diff-file-header">差分データが利用できません</div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <div class="document-content">
   <h2>ドキュメント内容</h2>
   <div class="content">

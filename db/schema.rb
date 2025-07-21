@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_21_052145) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_21_062424) do
   create_table "documents", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -19,6 +19,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_21_052145) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "diff_data"
     t.index ["repository_id"], name: "index_documents_on_repository_id"
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
