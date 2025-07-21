@@ -1,0 +1,21 @@
+<h1><%= @document.title %></h1>
+
+<div class="document-info">
+  <p><strong>リポジトリ:</strong> <%= link_to @document.repository.name, repository_path(@document.repository) %></p>
+  <p><strong>Pull Request:</strong> #<%= @document.pull_request_number %></p>
+  <p><strong>作成者:</strong> <%= @document.user.name %></p>
+  <p><strong>作成日:</strong> <%= @document.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+</div>
+
+<div class="document-content">
+  <h2>ドキュメント内容</h2>
+  <div class="content">
+    <%= simple_format(@document.content) %>
+  </div>
+</div>
+
+<div class="actions">
+  <%= link_to "ドキュメント一覧", documents_path, class: "btn" %>
+  <%= link_to "リポジトリ詳細", repository_path(@document.repository), class: "btn" %>
+  <%= link_to "ダッシュボード", user_path(current_user), class: "btn" %>
+</div>

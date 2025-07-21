@@ -1,0 +1,37 @@
+<h1>ドキュメント作成</h1>
+
+<%= form_with(model: @document, local: true) do |form| %>
+  <% if @document.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@document.errors.count, "error") %>が発生しました:</h2>
+      <ul>
+      <% @document.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :repository_id, "リポジトリ" %>
+    <%= form.collection_select :repository_id, @repositories, :id, :name, 
+          { prompt: "リポジトリを選択してください", selected: @document.repository_id }, 
+          { required: true } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :pull_request_number, "Pull Request番号" %>
+    <%= form.number_field :pull_request_number, required: true, min: 1, placeholder: "123" %>
+    <small>例: 123 (Pull Request #123の場合)</small>
+  </div>
+
+  <div class="info">
+    <p><strong>注意:</strong> 指定されたPull Requestの差分を取得し、AIが変更内容のドキュメントを自動生成します。</p>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "ドキュメントを作成" %>
+  </div>
+<% end %>
+
+<%= link_to "ドキュメント一覧", documents_path %>

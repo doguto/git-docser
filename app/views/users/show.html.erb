@@ -1,0 +1,41 @@
+<h1><%= @user.name %>のダッシュボード</h1>
+
+<div class="user-info">
+  <p><strong>メール:</strong> <%= @user.email %></p>
+</div>
+
+<div class="repositories">
+  <h2>リポジトリ (<%= @repositories.count %>)</h2>
+  <%= link_to "新しいリポジトリを登録", new_repository_path, class: "btn" %>
+  
+  <% if @repositories.any? %>
+    <ul>
+      <% @repositories.each do |repo| %>
+        <li>
+          <%= link_to repo.name, repository_path(repo) %> - <%= repo.url %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>リポジトリが登録されていません。</p>
+  <% end %>
+</div>
+
+<div class="documents">
+  <h2>ドキュメント (<%= @documents.count %>)</h2>
+  <%= link_to "新しいドキュメントを作成", new_document_path, class: "btn" %>
+  
+  <% if @documents.any? %>
+    <ul>
+      <% @documents.each do |doc| %>
+        <li>
+          <%= link_to doc.title, document_path(doc) %> (PR #<%= doc.pull_request_number %>)
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>ドキュメントが作成されていません。</p>
+  <% end %>
+</div>
+
+<%= link_to "ログアウト", logout_path, method: :delete, confirm: "ログアウトしますか？" %>

@@ -1,0 +1,34 @@
+<h1>リポジトリ一覧</h1>
+
+<%= link_to "新しいリポジトリを登録", new_repository_path, class: "btn btn-primary" %>
+
+<% if @repositories.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>リポジトリ名</th>
+        <th>URL</th>
+        <th>ドキュメント数</th>
+        <th>作成日</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @repositories.each do |repository| %>
+        <tr>
+          <td><%= link_to repository.name, repository_path(repository) %></td>
+          <td><%= link_to repository.url, repository.url, target: "_blank" %></td>
+          <td><%= repository.documents.count %></td>
+          <td><%= repository.created_at.strftime("%Y-%m-%d") %></td>
+          <td>
+            <%= link_to "詳細", repository_path(repository), class: "btn btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>リポジトリが登録されていません。</p>
+<% end %>
+
+<%= link_to "ダッシュボード", user_path(current_user) %>

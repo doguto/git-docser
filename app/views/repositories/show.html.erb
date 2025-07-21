@@ -1,0 +1,44 @@
+<h1><%= @repository.name %></h1>
+
+<div class="repository-info">
+  <p><strong>URL:</strong> <%= link_to @repository.url, @repository.url, target: "_blank" %></p>
+  <p><strong>作成日:</strong> <%= @repository.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+</div>
+
+<div class="documents-section">
+  <h2>ドキュメント (<%= @documents.count %>)</h2>
+  
+  <%= link_to "新しいドキュメントを作成", new_document_path(repository_id: @repository.id), class: "btn btn-primary" %>
+  
+  <% if @documents.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>タイトル</th>
+          <th>PR番号</th>
+          <th>作成日</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @documents.each do |document| %>
+          <tr>
+            <td><%= link_to document.title, document_path(document) %></td>
+            <td>#<%= document.pull_request_number %></td>
+            <td><%= document.created_at.strftime("%Y-%m-%d") %></td>
+            <td>
+              <%= link_to "詳細", document_path(document), class: "btn btn-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>このリポジトリにはドキュメントがありません。</p>
+  <% end %>
+</div>
+
+<div class="actions">
+  <%= link_to "リポジトリ一覧", repositories_path, class: "btn" %>
+  <%= link_to "ダッシュボード", user_path(current_user), class: "btn" %>
+</div>
