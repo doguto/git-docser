@@ -3,6 +3,7 @@ class OpenaiService
     client = OpenAI::Client.new(
       access_token: ENV["OPENAI_API_KEY"]
     )
+    Rails.logger.info "OPENAI KEY: #{ENV['OPENAI_API_KEY'].present? ? 'FOUND' : 'NOT FOUND'}"
 
     prompt = build_prompt(pr_data)
 
